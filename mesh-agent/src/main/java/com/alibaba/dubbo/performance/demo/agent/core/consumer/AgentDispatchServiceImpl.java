@@ -82,6 +82,7 @@ public class AgentDispatchServiceImpl implements AgentDispatchService {
                 while (true) {
                     MessageBucket messageBucket = messageBucketQueue.poll();
                     try {
+                        // to do
                         if (messageBucket == null) Thread.sleep(100);
                         else send(MessageUtil.messageBucketEncode(messageBucket));
                     } catch (InterruptedException e) {

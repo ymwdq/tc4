@@ -7,7 +7,7 @@ import java.util.LinkedList;
 
 /**
  * 考虑用一个线程负责发送 MessagaBucket 里的消息，但是其他线程需要往里添加 messageBucket，所以要注意线程安全问题
- * 拿到对消息快可能为空，由调用者自己处理
+ * 拿到de消息可能为空，由调用者自己处理
  */
 
 public class MessageBucketQueue {
