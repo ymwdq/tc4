@@ -2,7 +2,7 @@
 //
 //import com.alibaba.dubbo.performance.demo.agent.core.httpserver.HttpHandler;
 //import com.alibaba.dubbo.performance.demo.agent.message.model.Message;
-//import com.alibaba.dubbo.performance.demo.agent.message.model.MessageQueue;
+//import com.alibaba.dubbo.performance.demo.agent.message.model.MessageQueueImpl;
 //import com.alibaba.dubbo.performance.demo.agent.message.util.SpinLock;
 //
 //import java.util.ArrayList;
@@ -13,8 +13,8 @@
 // */
 //
 //public class MessageCenter {
-//    private MessageQueue sendQueue;
-//    private MessageQueue recvQueue;
+//    private MessageQueueImpl sendQueue;
+//    private MessageQueueImpl recvQueue;
 //    private List<HttpHandler> handlers = new ArrayList<>();
 //    private SpinLock sendLock = new SpinLock();
 //    private SpinLock recvLock = new SpinLock();

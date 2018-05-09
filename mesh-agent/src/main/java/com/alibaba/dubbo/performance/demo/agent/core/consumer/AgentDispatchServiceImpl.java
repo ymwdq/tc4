@@ -3,9 +3,10 @@ package com.alibaba.dubbo.performance.demo.agent.core.consumer;
 
 import com.alibaba.dubbo.performance.demo.agent.core.consumer.model.AgentDispatchService;
 import com.alibaba.dubbo.performance.demo.agent.core.loadbalance.LoadBalanceStrategy;
-import com.alibaba.dubbo.performance.demo.agent.message.MessageBucket;
 import com.alibaba.dubbo.performance.demo.agent.message.MessageBucketQueue;
-import com.alibaba.dubbo.performance.demo.agent.message.MessageUtil;
+import com.alibaba.dubbo.performance.demo.agent.message.model.Message;
+import com.alibaba.dubbo.performance.demo.agent.message.model.MessageQueue;
+import com.alibaba.dubbo.performance.demo.agent.message.util.MessageUtil;
 import com.alibaba.dubbo.performance.demo.agent.registry.Endpoint;
 import com.alibaba.dubbo.performance.demo.agent.registry.EtcdRegistry;
 import okhttp3.*;
@@ -21,12 +22,19 @@ public class AgentDispatchServiceImpl implements AgentDispatchService {
     private Object lock = new Object();
     private Random random = new Random();
     private MessageBucketQueue messageBucketQueue;
+    private MessageQueue sendQueue;
     private LoadBalanceStrategy loadBalanceStrategy;
 
     public AgentDispatchServiceImpl(EtcdRegistry registry, MessageBucketQueue messageBucketQueue, LoadBalanceStrategy loadBalanceStrategy) {
         this.registry = registry;
         this.messageBucketQueue = messageBucketQueue;
         this.loadBalanceStrategy = loadBalanceStrategy;
+    }
+
+    public AgentDispatchServiceImpl(EtcdRegistry registry, MessageQueue sendQueue, LoadBalanceStrategy loadBalanceStrategy) {
+        this.registry = registry;
+        this.loadBalanceStrategy = loadBalanceStrategy;
+        this.sendQueue = sendQueue;
     }
 
     @Override
@@ -80,11 +88,11 @@ public class AgentDispatchServiceImpl implements AgentDispatchService {
             @Override
             public void run() {
                 while (true) {
-                    MessageBucket messageBucket = messageBucketQueue.poll();
+                    Message sendMsg = sendQueue.poll();
                     try {
                         // to do
-                        if (messageBucket == null) Thread.sleep(100);
-                        else send(MessageUtil.messageBucketEncode(messageBucket));
+                        if (sendMsg == null) Thread.sleep(100);
+                        else send(MessageUtil.msgToString(sendMsg));
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     } catch (Exception e) {

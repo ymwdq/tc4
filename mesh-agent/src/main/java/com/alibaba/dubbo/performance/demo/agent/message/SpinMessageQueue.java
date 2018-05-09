@@ -2,14 +2,14 @@
 //
 //
 //import com.alibaba.dubbo.performance.demo.agent.message.model.Message;
-//import com.alibaba.dubbo.performance.demo.agent.message.model.MessageQueue;
+//import com.alibaba.dubbo.performance.demo.agent.message.model.MessageQueueImpl;
 //import com.alibaba.dubbo.performance.demo.agent.message.util.SpinLock;
 //
 //import java.util.LinkedList;
 //import java.util.concurrent.locks.Condition;
 //import java.util.concurrent.locks.ReentrantLock;
 //
-//public class SpinMessageQueue implements MessageQueue {
+//public class SpinMessageQueue implements MessageQueueImpl {
 //    private LinkedList<Message> messages = new LinkedList<>();
 //    private SpinLock lock = new SpinLock();
 //    private ReentrantLock reentrantLock = new ReentrantLock();

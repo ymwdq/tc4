@@ -1,5 +1,7 @@
-package com.alibaba.dubbo.performance.demo.agent.message;
+package com.alibaba.dubbo.performance.demo.agent.message.util;
 
+import com.alibaba.dubbo.performance.demo.agent.message.MessageBucket;
+import com.alibaba.dubbo.performance.demo.agent.message.MessageImpl;
 import com.alibaba.dubbo.performance.demo.agent.message.model.Message;
 import com.alibaba.fastjson.JSON;
 import io.netty.channel.ChannelHandlerContext;
@@ -23,9 +25,12 @@ public class MessageUtil {
         return null;
     }
 
-    public static void writeToCtx(ChannelHandlerContext ctx, Message msg) {
-        return;
+    public static String msgToString(Message msg) {
+        return JSON.toJSONString(msg);
+    }
 
+    public static MessageImpl stringToMsg(String data) {
+        return JSON.parseObject(data, MessageImpl.class);
     }
 
     public static String messageBucketEncode(MessageBucket messageBucket) {
