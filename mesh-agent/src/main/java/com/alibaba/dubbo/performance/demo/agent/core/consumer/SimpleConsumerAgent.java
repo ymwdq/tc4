@@ -1,6 +1,7 @@
 package com.alibaba.dubbo.performance.demo.agent.core.consumer;
 
 import com.alibaba.dubbo.performance.demo.agent.core.consumer.model.ConsumerAgent;
+import com.alibaba.dubbo.performance.demo.agent.core.consumer.nettyhttp.ConsumerHttpServer;
 import com.alibaba.dubbo.performance.demo.agent.core.loadbalance.Status;
 import com.alibaba.dubbo.performance.demo.agent.message.MessageBucketQueue;
 import com.alibaba.dubbo.performance.demo.agent.registry.EtcdRegistry;

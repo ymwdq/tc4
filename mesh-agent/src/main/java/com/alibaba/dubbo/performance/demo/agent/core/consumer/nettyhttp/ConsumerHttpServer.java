@@ -1,4 +1,4 @@
-package com.alibaba.dubbo.performance.demo.agent.core.consumer;
+package com.alibaba.dubbo.performance.demo.agent.core.consumer.nettyhttp;
 
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.Channel;

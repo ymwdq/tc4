@@ -1,6 +1,5 @@
-package com.alibaba.dubbo.performance.demo.agent.core.consumer;
+package com.alibaba.dubbo.performance.demo.agent.core.consumer.nettyhttp;
 
-import com.alibaba.dubbo.performance.demo.agent.message.MessageBucket;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelPipeline;
 import io.netty.channel.socket.SocketChannel;

@@ -43,7 +43,7 @@ public class ConsumerMessageBucketQueueManager {
     /**
      * 消息池，线程本地变量存储
      */
-    static class ThreadLocalMessagePool {
+    public static class ThreadLocalMessagePool {
         private ThreadLocalMessagePool() {}
         private static final ThreadLocal<ThreadMessageBucketProxy> local = new ThreadLocal<ThreadMessageBucketProxy>() {
             @Override
@@ -59,9 +59,9 @@ public class ConsumerMessageBucketQueueManager {
     }
 
     /**
-     * 自动取消息管理中心取消息
+     * 自动去消息管理中心取消息
      */
-     static class ThreadMessageBucketProxy {
+    public static class ThreadMessageBucketProxy {
         private MessageBucket messageBucket;
         public MessageBucket getBucket() {
            return messageBucket;

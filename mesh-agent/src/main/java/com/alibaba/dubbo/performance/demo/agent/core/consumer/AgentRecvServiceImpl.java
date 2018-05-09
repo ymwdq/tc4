@@ -1,6 +1,5 @@
 package com.alibaba.dubbo.performance.demo.agent.core.consumer;
 
-import com.alibaba.dubbo.performance.demo.agent.core.consumer.model.AgentDispatchService;
 import com.alibaba.dubbo.performance.demo.agent.core.consumer.model.AgentRecvService;
 import io.netty.channel.ChannelInboundHandlerAdapter;
 
