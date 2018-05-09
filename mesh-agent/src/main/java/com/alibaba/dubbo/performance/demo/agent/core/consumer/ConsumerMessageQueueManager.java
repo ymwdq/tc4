@@ -29,9 +29,4 @@ public class ConsumerMessageQueueManager {
         sendQueue.offer(msg);
         agentRecvService.registerTask(task, msg);
     }
-
-
-
-
-
 }

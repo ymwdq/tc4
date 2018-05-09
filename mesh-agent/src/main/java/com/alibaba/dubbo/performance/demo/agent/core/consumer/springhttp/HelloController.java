@@ -3,8 +3,6 @@ package com.alibaba.dubbo.performance.demo.agent.core.consumer.springhttp;
 import com.alibaba.dubbo.performance.demo.agent.core.consumer.ConsumerMessageQueueManager;
 import com.alibaba.dubbo.performance.demo.agent.message.MessageImpl;
 import com.alibaba.dubbo.performance.demo.agent.message.model.Message;
-import com.alibaba.dubbo.performance.demo.agent.registry.EtcdRegistry;
-import com.alibaba.dubbo.performance.demo.agent.registry.IRegistry;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.RequestMapping;
