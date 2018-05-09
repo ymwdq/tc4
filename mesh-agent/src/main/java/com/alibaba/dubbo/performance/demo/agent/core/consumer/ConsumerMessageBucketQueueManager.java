@@ -9,18 +9,19 @@ import com.alibaba.dubbo.performance.demo.agent.message.util.SpinLock;
 import java.util.LinkedList;
 
 public class ConsumerMessageBucketQueueManager {
-    private static volatile MessageBucketQueue workQueue = new MessageBucketQueue();
+    private static volatile MessageBucketQueue sendQueue = new MessageBucketQueue();
+    private static volatile MessageBucketQueue recvQueue = new MessageBucketQueue();
     private static LinkedList<MessageBucket> freeBuckets = new LinkedList<>();
     private static SpinLock lock = new SpinLock();
-    public static MessageBucketQueue getMessageBucketQueue() {
-        return workQueue;
+    public static MessageBucketQueue getSendQueue() {
+        return sendQueue;
     }
 
     /**
      * 使用自旋锁可能死锁?
      * @return
      */
-    public static MessageBucket getBucket() {
+    public static MessageBucket getSendBucket() {
         lock.lock();
         MessageBucket r;
         if (freeBuckets.size() == 0) {
@@ -33,7 +34,7 @@ public class ConsumerMessageBucketQueueManager {
         return r;
     }
 
-    public static void freeBucket(MessageBucket messageBucket) {
+    public static void freeSendBucket(MessageBucket messageBucket) {
         lock.lock();
         freeBuckets.add(messageBucket);
         lock.unlock();
@@ -67,7 +68,7 @@ public class ConsumerMessageBucketQueueManager {
            return messageBucket;
         }
         public void refresh() {
-            messageBucket = ConsumerMessageBucketQueueManager.getBucket();
+            messageBucket = ConsumerMessageBucketQueueManager.getSendBucket();
         }
     }
 }

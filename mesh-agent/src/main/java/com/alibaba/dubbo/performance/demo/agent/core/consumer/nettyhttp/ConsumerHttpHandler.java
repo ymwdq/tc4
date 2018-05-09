@@ -73,7 +73,7 @@ public class ConsumerHttpHandler extends SimpleChannelInboundHandler<Object> {
         MessageBucket bucket = messageBucketPoolThreadLocal.get().getBucket();
         bucket.addMessage(agentMessage);
         if (bucket.full()) {
-            ConsumerMessageBucketQueueManager.getMessageBucketQueue().offer(bucket);
+            ConsumerMessageBucketQueueManager.getSendQueue().offer(bucket);
             messageBucketPoolThreadLocal.get().refresh();
         }
     }
