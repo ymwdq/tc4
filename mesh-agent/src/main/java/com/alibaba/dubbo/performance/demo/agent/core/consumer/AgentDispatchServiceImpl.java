@@ -21,13 +21,11 @@ public class AgentDispatchServiceImpl implements AgentDispatchService {
     private List<Endpoint> endpoints = null;
     private Object lock = new Object();
     private Random random = new Random();
-    private MessageBucketQueue messageBucketQueue;
     private MessageQueue sendQueue;
     private LoadBalanceStrategy loadBalanceStrategy;
 
-    public AgentDispatchServiceImpl(EtcdRegistry registry, MessageBucketQueue messageBucketQueue, LoadBalanceStrategy loadBalanceStrategy) {
+    public AgentDispatchServiceImpl(EtcdRegistry registry, LoadBalanceStrategy loadBalanceStrategy) {
         this.registry = registry;
-        this.messageBucketQueue = messageBucketQueue;
         this.loadBalanceStrategy = loadBalanceStrategy;
     }
 
@@ -49,7 +47,7 @@ public class AgentDispatchServiceImpl implements AgentDispatchService {
 
     @Override
     public void setBucketQueue(MessageBucketQueue messageBucketQueue) {
-        this.messageBucketQueue = messageBucketQueue;
+
     }
 
     private void send(String parameter) throws Exception {

@@ -3,9 +3,11 @@ package com.alibaba.dubbo.performance.demo.agent.core.consumer.springhttp;
 import com.alibaba.dubbo.performance.demo.agent.core.consumer.ConsumerMessageQueueManager;
 import com.alibaba.dubbo.performance.demo.agent.message.MessageImpl;
 import com.alibaba.dubbo.performance.demo.agent.message.model.Message;
+import com.alibaba.dubbo.performance.demo.agent.message.util.MessageUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.context.request.async.DeferredResult;
 
@@ -17,7 +19,7 @@ public class HelloController {
 
 //    private IRegistry registry = new EtcdRegistry(System.getProperty("etcd.url"));
 
-    @RequestMapping(value = "")
+    @RequestMapping(value = "/service")
     public DeferredResult<Integer> invoke() throws Exception {
         logger.info("get req");
         String parameter = "haha";
@@ -33,6 +35,14 @@ public class HelloController {
         logger.info("consumer begin");
         Message msg = new MessageImpl(IdGenerator.getId(), parameter);
         ConsumerMessageQueueManager.offerSendQueue(msg, task);
+    }
+
+    @RequestMapping(value = "/agent")
+    public Object getResult(@RequestParam("msg") String msgString) throws Exception {
+        logger.info("get provider result");
+        Message msg = MessageUtil.stringToMsg(msgString);
+        ConsumerMessageQueueManager.offerRecvQueue(msg);
+        return "over";
     }
 }
 
