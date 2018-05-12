@@ -1,8 +1,9 @@
 #!/bin/bash
 
-ETCD_HOST=$(ip addr show docker0 | grep 'inet\b' | awk '{print $2}' | cut -d '/' -f 1)
-ETCD_PORT=2379
-ETCD_URL=http://$ETCD_HOST:$ETCD_PORT
+#ETCD_HOST=$(ip addr show docker0 | grep 'inet\b' | awk '{print $2}' | cut -d '/' -f 1)
+#ETCD_PORT=2379
+#ETCD_URL=http://$ETCD_HOST:$ETCD_PORT
+ETCD_URL=http://10.108.112.162:2379
 
 echo ETCD_URL = $ETCD_URL
 
@@ -14,8 +15,8 @@ if [[ "$1" == "consumer" ]]; then
        -Dtype=consumer \
        -Dserver.port=20000\
        -Detcd.url=$ETCD_URL \
-       -Dlogs.dir=/root/logs \
-       /root/dists/mesh-agent.jar
+       -Dlogs.dir=/var/logs \
+       /home/ym/sourceCode/tianchi-4/agent-demo/mesh-agent/target/mesh-agent-1.0-SNAPSHOT.jar
 elif [[ "$1" == "provider-small" ]]; then
   echo "Starting small provider agent..."
   java -jar \

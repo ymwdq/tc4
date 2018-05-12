@@ -29,7 +29,7 @@ import java.util.Random;
 public class HelloController {
 
     private Logger logger = LoggerFactory.getLogger(HelloController.class);
-    
+
     private IRegistry registry = new EtcdRegistry(System.getProperty("etcd.url"));
 
     private RpcClient rpcClient = new RpcClient(registry);

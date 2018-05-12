@@ -9,6 +9,7 @@ import com.alibaba.dubbo.performance.demo.agent.message.model.MessageQueue;
 import com.alibaba.dubbo.performance.demo.agent.message.util.MessageUtil;
 import com.alibaba.dubbo.performance.demo.agent.registry.Endpoint;
 import com.alibaba.dubbo.performance.demo.agent.registry.EtcdRegistry;
+import com.alibaba.dubbo.performance.demo.agent.registry.IRegistry;
 import okhttp3.*;
 
 import java.io.IOException;
@@ -17,12 +18,16 @@ import java.util.Random;
 
 public class AgentDispatchServiceImpl implements AgentDispatchService {
     private OkHttpClient httpClient = new OkHttpClient();
-    private EtcdRegistry registry;
+    private IRegistry registry;
     private List<Endpoint> endpoints = null;
     private Object lock = new Object();
     private Random random = new Random();
     private MessageQueue sendQueue;
     private LoadBalanceStrategy loadBalanceStrategy;
+
+    public AgentDispatchServiceImpl(IRegistry registry) {
+        this.registry = registry;
+    }
 
     public AgentDispatchServiceImpl(EtcdRegistry registry, LoadBalanceStrategy loadBalanceStrategy) {
         this.registry = registry;
