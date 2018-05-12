@@ -1,9 +1,11 @@
 package com.alibaba.dubbo.performance.demo.agent.core.consumer;
 
 import com.alibaba.dubbo.performance.demo.agent.core.consumer.model.AgentRecvService;
+import com.alibaba.dubbo.performance.demo.agent.core.consumer.springhttp.IdGenerator;
 import com.alibaba.dubbo.performance.demo.agent.core.consumer.springhttp.Task;
 import com.alibaba.dubbo.performance.demo.agent.message.model.Message;
 import com.alibaba.dubbo.performance.demo.agent.message.model.MessageQueue;
+import com.alibaba.fastjson.JSON;
 import io.netty.channel.ChannelInboundHandlerAdapter;
 import org.apache.log4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,9 +30,10 @@ public class AgentRecvServiceImpl implements AgentRecvService {
                         logger.info("msg: " + msg.getId() + ":" + msg.getBody());
                         Task task = map.get(msg);
                         logger.info("task" + task);
-                        task.setResult(msg.getBody());
+//                        task.setResult(JSON.parseObject((byte[])msg.getBody(), Integer.class));
+                        task.setResult(Integer.valueOf((String)msg.getBody()));
+                        IdGenerator.freeId(msg.getId());
                     } else {
-
                         try {
                             Thread.sleep(100);
                         } catch (InterruptedException e) {

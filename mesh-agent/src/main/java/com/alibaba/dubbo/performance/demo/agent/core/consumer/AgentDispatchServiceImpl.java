@@ -31,6 +31,18 @@ public class AgentDispatchServiceImpl implements AgentDispatchService {
 
     public AgentDispatchServiceImpl(IRegistry registry) {
         this.registry = registry;
+        if (null == endpoints){
+            synchronized (lock){
+                if (null == endpoints){
+                    try {
+                        endpoints = registry.find("provider");
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }
+
     }
 
     public AgentDispatchServiceImpl(EtcdRegistry registry, LoadBalanceStrategy loadBalanceStrategy) {
@@ -65,17 +77,11 @@ public class AgentDispatchServiceImpl implements AgentDispatchService {
     }
 
     private void send(String parameter) throws Exception {
-        if (null == endpoints){
-            synchronized (lock){
-                if (null == endpoints){
-                    endpoints = registry.find("provider");
-                }
-            }
-        }
-        for (Endpoint each : endpoints) {
-            logger.info(each.getHost());
-            logger.info("" + each.getPort());
-        }
+
+//        for (Endpoint each : endpoints) {
+//            logger.info(each.getHost());
+//            logger.info("" + each.getPort());
+//        }
         // 简单的负载均衡，随机取一个
         Endpoint endpoint = endpoints.get(random.nextInt(endpoints.size()));
 

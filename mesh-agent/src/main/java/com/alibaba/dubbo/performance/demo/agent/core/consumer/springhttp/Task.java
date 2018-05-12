@@ -4,10 +4,10 @@ import org.springframework.web.context.request.async.DeferredResult;
 
 
 public class Task {
-    private DeferredResult deferredResult;
+    private DeferredResult<Integer> deferredResult;
     private int id;
 
-    public Task(DeferredResult deferredResult) {
+    public Task(DeferredResult<Integer> deferredResult) {
         this.deferredResult = deferredResult;
     }
 
@@ -20,7 +20,7 @@ public class Task {
     }
 
     public void setResult(Object obj) {
-        this.deferredResult.setResult(obj);
+        this.deferredResult.setResult((Integer)obj);
     }
 
 }

@@ -7,8 +7,8 @@ import io.netty.buffer.ByteBuf;
  */
 public interface Message {
     int getId();
-    String getBody();
+    Object getBody();
     byte[] getBinaryBody();
     void setId(int id);
-    void setBody(String body);
+    void setBody(Object body);
 }

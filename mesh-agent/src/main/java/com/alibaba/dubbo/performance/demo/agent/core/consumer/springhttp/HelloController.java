@@ -56,16 +56,17 @@ public class HelloController {
     public void consumer(Task task, String parameter) throws Exception {
         logger.info("consumer begin");
         Message msg = new MessageImpl(IdGenerator.getId(), parameter);
-        logger.info("" + msg.getId()+ ":" + msg.getBody());
+//        logger.info("" + msg.getId()+ ":" + msg.getBody());
         messageManager.offerSendQueue(msg, task);
     }
 
     @RequestMapping(value = "/agent")
     public Object getResult(@RequestParam("msg") String msgString) throws Exception {
         logger.info("get provider result");
+        logger.info("msgString: " + msgString);
         Message msg = MessageUtil.stringToMsg(msgString);
         messageManager.offerRecvQueue(msg);
-        return "over";
+        return "OK";
     }
 
     static {

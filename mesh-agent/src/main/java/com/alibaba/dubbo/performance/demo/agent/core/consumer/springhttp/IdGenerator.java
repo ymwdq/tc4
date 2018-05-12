@@ -7,6 +7,8 @@ import java.util.Stack;
  */
 public class IdGenerator {
     private static int DEFAULT_CAPACITY = 3000;
+
+    // safe thread
     private static Stack<Integer> freeId = new Stack<>();
 
     public static int getId() {
