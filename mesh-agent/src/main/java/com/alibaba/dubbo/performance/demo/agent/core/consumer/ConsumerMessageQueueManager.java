@@ -11,6 +11,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
+import java.util.concurrent.locks.ReentrantLock;
+
 
 @Component
 public class ConsumerMessageQueueManager {
@@ -23,7 +25,7 @@ public class ConsumerMessageQueueManager {
 
     public ConsumerMessageQueueManager(IRegistry registry) {
         recvQueue = new MessageQueueSafeImpl();
-        sendQueue = new MessageQueueImpl();
+        sendQueue = new MessageQueueSafeImpl();
         agentRecvService = new AgentRecvServiceImpl();
         agentRecvService.setRecvQueue(recvQueue);
         agentRecvService.start();
@@ -39,7 +41,7 @@ public class ConsumerMessageQueueManager {
         return recvQueue;
     }
 
-    public synchronized void offerSendQueue(Message msg, Task task) {
+    public void offerSendQueue(Message msg, Task task) {
         sendQueue.offer(msg);
         agentRecvService.registerTask(task, msg);
     }

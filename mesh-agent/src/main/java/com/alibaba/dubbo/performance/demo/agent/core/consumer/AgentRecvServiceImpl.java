@@ -48,7 +48,7 @@ public class AgentRecvServiceImpl implements AgentRecvService {
     }
 
     @Override
-    public void registerTask(Task task, Message msg) {
+    public synchronized void registerTask(Task task, Message msg) {
         map.put(task, msg);
 
     }
