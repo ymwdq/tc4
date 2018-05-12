@@ -2,6 +2,8 @@ package com.alibaba.dubbo.performance.demo.agent.core.consumer.model;
 
 import com.alibaba.dubbo.performance.demo.agent.core.loadbalance.LoadBalanceStrategy;
 import com.alibaba.dubbo.performance.demo.agent.message.MessageBucketQueue;
+import com.alibaba.dubbo.performance.demo.agent.message.model.Message;
+import com.alibaba.dubbo.performance.demo.agent.message.model.MessageQueue;
 import com.alibaba.dubbo.performance.demo.agent.registry.Endpoint;
 
 import java.util.List;
@@ -14,4 +16,5 @@ public interface AgentDispatchService {
     void setEndpoints(List<Endpoint> endpoints);
     void setLoadbalanceStrategy(LoadBalanceStrategy strategy);
     void setBucketQueue(MessageBucketQueue messageBucketQueue);
+    void setSendQueue(MessageQueue sendQueue);
 }

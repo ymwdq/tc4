@@ -22,43 +22,59 @@ public class HelloController {
     private static Logger logger = LoggerFactory.getLogger(HelloController.class);
 
     private static IRegistry registry = new EtcdRegistry(System.getProperty("etcd.url"));
-    private static AgentDispatchServiceImpl agentDispatchService = new AgentDispatchServiceImpl(registry);
-    private static final int PORT = 8080;
+    private static final int PORT = 20000;
     private static final String serviceName = "consumer";
+    private static ConsumerMessageQueueManager messageManager;
 
-    @RequestMapping(value = "/service")
-    public DeferredResult<Integer> invoke() throws Exception {
+    @RequestMapping(value = "")
+    public Object invoke(@RequestParam("interface") String interfaceName,
+                         @RequestParam("method") String method,
+                         @RequestParam("parameterTypesString") String parameterTypesString,
+                         @RequestParam("parameter") String parameter) throws Exception {
         logger.info("get req");
-        String parameter = "haha";
+        logger.info(parameter);
         DeferredResult<Integer> result = new DeferredResult<>();
         Task task = new Task(result);
         consumer(task, parameter);
         return result;
     }
 
+//    @RequestMapping(value = "")
+//    public Object invoke() throws Exception {
+//        logger.info("get req");
+//        String parameter = "haha";
+//        logger.info(parameter);
+//        DeferredResult<Integer> result = new DeferredResult<>();
+//        Task task = new Task(result);
+//        consumer(task, parameter);
+//        return result;
+//    }
+//
+
 
 
     public void consumer(Task task, String parameter) throws Exception {
         logger.info("consumer begin");
         Message msg = new MessageImpl(IdGenerator.getId(), parameter);
-        ConsumerMessageQueueManager.offerSendQueue(msg, task);
+        logger.info("" + msg.getId()+ ":" + msg.getBody());
+        messageManager.offerSendQueue(msg, task);
     }
 
     @RequestMapping(value = "/agent")
     public Object getResult(@RequestParam("msg") String msgString) throws Exception {
         logger.info("get provider result");
         Message msg = MessageUtil.stringToMsg(msgString);
-        ConsumerMessageQueueManager.offerRecvQueue(msg);
+        messageManager.offerRecvQueue(msg);
         return "over";
     }
 
     static {
         try {
             registry.register(serviceName, PORT);
+            messageManager = new ConsumerMessageQueueManager(registry);
         } catch (Exception e) {
             e.printStackTrace();
         }
-        agentDispatchService.start();
     }
 
 

@@ -5,12 +5,14 @@ import com.alibaba.dubbo.performance.demo.agent.core.consumer.springhttp.Task;
 import com.alibaba.dubbo.performance.demo.agent.message.model.Message;
 import com.alibaba.dubbo.performance.demo.agent.message.model.MessageQueue;
 import io.netty.channel.ChannelInboundHandlerAdapter;
+import org.apache.log4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.web.context.request.async.DeferredResult;
 
 public class AgentRecvServiceImpl implements AgentRecvService {
     private MessageQueue recvQueue;
     private TaskMessageMap map = new TaskMessageMap();
-
+    private static org.slf4j.Logger logger = LoggerFactory.getLogger(AgentRecvServiceImpl.class);
     public void setRecvQueue(MessageQueue messageQueue) {
         this.recvQueue = messageQueue;
     }
@@ -23,7 +25,9 @@ public class AgentRecvServiceImpl implements AgentRecvService {
                 while (true) {
                     if (recvQueue.size() != 0) {
                         Message msg = recvQueue.poll();
+                        logger.info("msg: " + msg.getId() + ":" + msg.getBody());
                         Task task = map.get(msg);
+                        logger.info("task" + task);
                         task.setResult(msg.getBody());
                     } else {
 

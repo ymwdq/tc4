@@ -2,6 +2,7 @@ package com.alibaba.dubbo.performance.demo.agent.core.consumer;
 
 
 import com.alibaba.dubbo.performance.demo.agent.core.consumer.model.AgentDispatchService;
+import com.alibaba.dubbo.performance.demo.agent.core.consumer.springhttp.HelloController;
 import com.alibaba.dubbo.performance.demo.agent.core.loadbalance.LoadBalanceStrategy;
 import com.alibaba.dubbo.performance.demo.agent.message.MessageBucketQueue;
 import com.alibaba.dubbo.performance.demo.agent.message.model.Message;
@@ -11,12 +12,15 @@ import com.alibaba.dubbo.performance.demo.agent.registry.Endpoint;
 import com.alibaba.dubbo.performance.demo.agent.registry.EtcdRegistry;
 import com.alibaba.dubbo.performance.demo.agent.registry.IRegistry;
 import okhttp3.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.util.List;
 import java.util.Random;
 
 public class AgentDispatchServiceImpl implements AgentDispatchService {
+    private static Logger logger = LoggerFactory.getLogger(AgentDispatchServiceImpl.class);
     private OkHttpClient httpClient = new OkHttpClient();
     private IRegistry registry;
     private List<Endpoint> endpoints = null;
@@ -41,6 +45,11 @@ public class AgentDispatchServiceImpl implements AgentDispatchService {
     }
 
     @Override
+    public void setSendQueue(MessageQueue sendQueue) {
+        this.sendQueue = sendQueue;
+    }
+
+    @Override
     public void setEndpoints(List<Endpoint> endpoints) {
         this.endpoints = endpoints;
     }
@@ -59,18 +68,21 @@ public class AgentDispatchServiceImpl implements AgentDispatchService {
         if (null == endpoints){
             synchronized (lock){
                 if (null == endpoints){
-                    endpoints = registry.find("com.alibaba.dubbo.performance.demo.provider.IHelloService");
+                    endpoints = registry.find("provider");
                 }
             }
         }
-
+        for (Endpoint each : endpoints) {
+            logger.info(each.getHost());
+            logger.info("" + each.getPort());
+        }
         // 简单的负载均衡，随机取一个
         Endpoint endpoint = endpoints.get(random.nextInt(endpoints.size()));
 
-        String url =  "http://" + endpoint.getHost() + ":" + endpoint.getPort();
+        String url =  "http://" + endpoint.getHost() + ":" + endpoint.getPort() + "/agent";
 
         RequestBody requestBody = new FormBody.Builder()
-                .add("parameter",parameter)
+                .add("msg",parameter)
                 .build();
 
         Request request = new Request.Builder()
@@ -94,8 +106,13 @@ public class AgentDispatchServiceImpl implements AgentDispatchService {
                     Message sendMsg = sendQueue.poll();
                     try {
                         // to do
-                        if (sendMsg == null) Thread.sleep(100);
-                        else send(MessageUtil.msgToString(sendMsg));
+                        if (sendMsg == null) {
+                            Thread.sleep(100);
+                        }
+                        else {
+                            logger.info("msg: " + sendMsg);
+                            send(MessageUtil.msgToString(sendMsg));
+                        }
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     } catch (Exception e) {
