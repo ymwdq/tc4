@@ -11,8 +11,8 @@ public class AgentRecvServiceImpl implements AgentRecvService {
     private MessageQueue recvQueue;
     private TaskMessageMap map = new TaskMessageMap();
 
-    public AgentRecvServiceImpl() {
-        recvQueue = ConsumerMessageQueueManager.getRecvQueue();
+    public void setRecvQueue(MessageQueue messageQueue) {
+        this.recvQueue = messageQueue;
     }
 
     @Override

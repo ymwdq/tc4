@@ -12,9 +12,9 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class ConsumerMessageQueueManager {
-    private static volatile MessageQueue sendQueue = new MessageQueueImpl();
-    private static volatile MessageQueue recvQueue = new MessageQueueSafeImpl();
-    private static AgentRecvServiceImpl agentRecvService = new AgentRecvServiceImpl();
+    private static volatile MessageQueue sendQueue;
+    private static volatile MessageQueue recvQueue;
+    private static AgentRecvServiceImpl agentRecvService;
     private Logger logger = LoggerFactory.getLogger(ConsumerMessageQueueManager.class);
 
     public static MessageQueue getSendQueue() {
@@ -32,5 +32,13 @@ public class ConsumerMessageQueueManager {
 
     public static void offerRecvQueue(Message msg) {
         recvQueue.offer(msg);
+    }
+
+    static {
+        recvQueue = new MessageQueueSafeImpl();
+        sendQueue = new MessageQueueImpl();
+        agentRecvService = new AgentRecvServiceImpl();
+        agentRecvService.setRecvQueue(recvQueue);
+        agentRecvService.start();
     }
 }
