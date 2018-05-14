@@ -4,26 +4,23 @@ import com.alibaba.dubbo.performance.demo.agent.message.model.Message;
 import com.alibaba.dubbo.performance.demo.agent.message.model.MessageQueue;
 
 import java.util.LinkedList;
+import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.BlockingQueue;
 
 /**
  * not thread safe
  */
 public class MessageQueueSafeImpl implements MessageQueue {
-    private LinkedList<Message> queue = new LinkedList<>();
+    private BlockingQueue<Message> queue = new ArrayBlockingQueue<>(5120);
 
     @Override
-    public synchronized void offer(Message message) {
+    public void offer(Message message) {
         queue.offer(message);
     }
 
     @Override
-    public synchronized Message poll() {
-        Message message;
-        if (size() == 0) {
-            return null;
-        }
-        message = queue.poll();
-        return message;
+    public Message poll() {
+        return queue.poll();
     }
 
     @Override

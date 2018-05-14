@@ -8,6 +8,7 @@ import com.alibaba.dubbo.performance.demo.agent.message.model.Message;
 public class MessageImpl implements Message {
     private int id;
     private Object body;
+    private byte[] binaryBody;
 
     public MessageImpl(int id, String body) {
         this.id = id;
@@ -50,6 +51,11 @@ public class MessageImpl implements Message {
 
     @Override
     public byte[] getBinaryBody() {
-        return null;
+        return binaryBody;
+    }
+
+    @Override
+    public void setBinaryBody(byte[] body) {
+        this.binaryBody = body;
     }
 }

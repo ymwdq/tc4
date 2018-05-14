@@ -3,7 +3,8 @@
 #ETCD_HOST=$(ip addr show docker0 | grep 'inet\b' | awk '{print $2}' | cut -d '/' -f 1)
 #ETCD_PORT=2379
 #ETCD_URL=http://$ETCD_HOST:$ETCD_PORT
-ETCD_URL=http://10.108.112.162:2379
+#ETCD_URL=http://10.108.112.162:2379
+ETCD_URL=http://10.108.112.128:2379
 
 echo ETCD_URL = $ETCD_URL
 

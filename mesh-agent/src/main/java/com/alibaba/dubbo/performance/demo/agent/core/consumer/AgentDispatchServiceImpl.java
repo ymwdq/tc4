@@ -42,6 +42,9 @@ public class AgentDispatchServiceImpl implements AgentDispatchService {
                 }
             }
         }
+        for (Endpoint endpoint : endpoints) {
+            System.out.println("end points" + endpoint.getHost());
+        }
 
     }
 
@@ -95,12 +98,23 @@ public class AgentDispatchServiceImpl implements AgentDispatchService {
                 .url(url)
                 .post(requestBody)
                 .build();
-
-        try (Response response = httpClient.newCall(request).execute()) {
-            if (!response.isSuccessful()) {
-                throw new IOException("Unexpected code " + response);
+        logger.info("send time" + System.currentTimeMillis());
+        httpClient.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                call.cancel();
             }
-        }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                response.close();
+            }
+        });
+//        try (Response response = httpClient.newCall(request).execute()) {
+//            if (!response.isSuccessful()) {
+//                throw new IOException("Unexpected code " + response);
+//            }
+//        }
     }
 
     @Override
@@ -109,14 +123,22 @@ public class AgentDispatchServiceImpl implements AgentDispatchService {
             @Override
             public void run() {
                 while (true) {
-                    Message sendMsg = sendQueue.poll();
+//                    Message sendMsg = sendQueue.poll();
+//                    try {
+//                        send(MessageUtil.msgToString(sendMsg));
+//                    } catch (Exception e) {
+//                        e.printStackTrace();
+//                    }
                     try {
+                        Message sendMsg = sendQueue.poll();
                         // to do
                         if (sendMsg == null) {
-                            Thread.sleep(100);
-                        }
-                        else {
-                            logger.info("msg: " + sendMsg);
+//                            logger.info("send queue empty");
+//                            Thread.sleep(100);
+                        } else {
+                            logger.info("send queue size" + sendQueue.size());
+//                            logger.info("msg send : " + sendMsg.getId());
+                            logger.info("send msg " + sendMsg.getId() + " " + System.currentTimeMillis());
                             send(MessageUtil.msgToString(sendMsg));
                         }
                     } catch (InterruptedException e) {
@@ -125,6 +147,7 @@ public class AgentDispatchServiceImpl implements AgentDispatchService {
                         e.printStackTrace();
                     }
                 }
+
             }
         }).start();
     }

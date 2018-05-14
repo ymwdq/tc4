@@ -23,4 +23,12 @@ public class Task {
         this.deferredResult.setResult((Integer)obj);
     }
 
+//    public void printSendTime() {
+//        System.out.println("" + this.getId() + "send: " + System.currentTimeMillis());
+//    }
+//
+//    public void printRevTime() {
+//        System.out.println("" + this.getId() + "recv: " + System.currentTimeMillis());
+//    }
+
 }

@@ -11,6 +11,8 @@ import org.apache.log4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.context.request.async.DeferredResult;
 
+import java.nio.charset.Charset;
+
 public class AgentRecvServiceImpl implements AgentRecvService {
     private MessageQueue recvQueue;
     private TaskMessageMap map = new TaskMessageMap();
@@ -26,17 +28,23 @@ public class AgentRecvServiceImpl implements AgentRecvService {
             public void run() {
                 while (true) {
                     if (recvQueue.size() != 0) {
+                        logger.info("recvtime: " + System.currentTimeMillis());
+                        logger.info("recvQueueSize: " + recvQueue.size());
                         Message msg = recvQueue.poll();
-                        logger.info("msg: " + msg.getId() + ":" + msg.getBody());
+//                        logger.info("msg: " + msg.getId() + ":" + msg.getBody());
                         Task task = map.get(msg);
-                        logger.info("task" + task);
+//                        logger.info("task" + task);
 //                        task.setResult(JSON.parseObject((byte[])msg.getBody(), Integer.class));
-                        task.setResult(Integer.valueOf((String)msg.getBody()));
+//                        task.setResult(JSON.parseObject(msg.getBody(), Integer.class));
+//                        task.setResult(msg.getBody());
+                        logger.info("setresult: " + msg.getId() + " time: " + System.currentTimeMillis());
+                        task.setResult(Integer.valueOf((String) msg.getBody()));
                         IdGenerator.freeId(msg.getId());
                     } else {
                         try {
-                            Thread.sleep(100);
-                        } catch (InterruptedException e) {
+//                            logger.info("recvQueue empty");
+//                            Thread.sleep(100);
+                        } catch (Exception e) {
                             e.printStackTrace();
                         }
                     }

@@ -26,16 +26,25 @@ public class HelloController {
     private static final String serviceName = "consumer";
     private static ConsumerMessageQueueManager messageManager;
 
+    private static long totalTime = 0;
+    private static long cnt = 1;
+    private static long avgTime = 0;
+
     @RequestMapping(value = "")
     public Object invoke(@RequestParam("interface") String interfaceName,
                          @RequestParam("method") String method,
                          @RequestParam("parameterTypesString") String parameterTypesString,
                          @RequestParam("parameter") String parameter) throws Exception {
-        logger.info("get req");
-        logger.info(parameter);
+        long reqTime = System.currentTimeMillis();
+//        logger.info("get req: " + reqTime);
+//        logger.info(parameter);
         DeferredResult<Integer> result = new DeferredResult<>();
         Task task = new Task(result);
         consumer(task, parameter);
+        long afterTime = System.currentTimeMillis();
+//        logger.info("after cosumer time: " + afterTime);
+//        totalTime += (afterTime - reqTime);
+//        logger.info("total time" + totalTime);
         return result;
     }
 
@@ -63,8 +72,9 @@ public class HelloController {
     @RequestMapping(value = "/agent")
     public Object getResult(@RequestParam("msg") String msgString) throws Exception {
         logger.info("get provider result");
-        logger.info("msgString: " + msgString);
+//        logger.info("msgString: " + msgString);
         Message msg = MessageUtil.stringToMsg(msgString);
+        logger.info("controller recv: " + msg.getId() + System.currentTimeMillis());
         messageManager.offerRecvQueue(msg);
         return "OK";
     }

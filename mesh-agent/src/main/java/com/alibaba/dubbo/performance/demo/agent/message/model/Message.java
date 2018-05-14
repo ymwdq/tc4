@@ -11,4 +11,5 @@ public interface Message {
     byte[] getBinaryBody();
     void setId(int id);
     void setBody(Object body);
+    void setBinaryBody(byte[] body);
 }
