@@ -11,16 +11,25 @@ import java.util.concurrent.BlockingQueue;
  * not thread safe
  */
 public class MessageQueueSafeImpl implements MessageQueue {
-    private BlockingQueue<Message> queue = new ArrayBlockingQueue<>(5120);
+    private BlockingQueue<Message> queue = new ArrayBlockingQueue<>(512);
 
     @Override
     public void offer(Message message) {
-        queue.offer(message);
+        try {
+            queue.put(message);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
     public Message poll() {
-        return queue.poll();
+        try {
+            return this.queue.take();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
     @Override

@@ -6,8 +6,8 @@ public class IpHelper {
 
     public static String getHostIp() throws Exception {
 
-//        String ip = InetAddress.getLocalHost().getHostAddress();
-//        return ip;
-        return "10.108.113.158";
+        String ip = InetAddress.getLocalHost().getHostAddress();
+        return ip;
+//        return "10.108.113.158";
     }
 }
